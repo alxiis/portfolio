@@ -3,6 +3,9 @@
  * Modifie uniquement ce fichier pour mettre à jour le site.
  */
 
+// Préfixe du site (ex. /portfolio sur GitHub Pages), vide en local.
+const base = process.env.NEXT_PUBLIC_BASE_PATH ?? '';
+
 export const profile = {
   firstName: 'Alexis',
   lastName: 'Fievet',
@@ -15,8 +18,8 @@ export const profile = {
   city: 'Colomiers (31)',
   email: 'fvt.alexiis@gmail.com',
   phone: '06 52 14 41 77',
-  cvFile: '/CV-Fievet_Alexis.pdf',
-  photo: { src: '/img/alexis.webp', width: 720, height: 960, alt: 'Portrait d’Alexis Fievet' },
+  cvFile: base + '/CV-Fievet_Alexis.pdf',
+  photo: { src: base + '/img/alexis.webp', width: 720, height: 960, alt: 'Portrait d’Alexis Fievet' },
   // Le CV indique seulement « Alexis Fievet » sans URL.
   // Colle ici l'URL complète de ton profil : le lien apparaît alors automatiquement (laisse vide pour le masquer).
   linkedin: 'https://www.linkedin.com/in/alexis-fievet/',
@@ -43,8 +46,8 @@ export const qualities = [
 export type Logo = { src: string; width: number; height: number; alt: string };
 
 export const logos: Record<'noous' | 'igensia', Logo> = {
-  noous: { src: '/img/noous.webp', width: 400, height: 154, alt: 'Logo NOOUS' },
-  igensia: { src: '/img/igensia.webp', width: 480, height: 176, alt: 'Logo Groupe Igensia Education' },
+  noous: { src: base + '/img/noous.webp', width: 400, height: 154, alt: 'Logo NOOUS' },
+  igensia: { src: base + '/img/igensia.webp', width: 480, height: 176, alt: 'Logo Groupe Igensia Education' },
 };
 
 export type Experience = {

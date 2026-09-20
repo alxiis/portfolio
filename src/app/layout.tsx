@@ -13,7 +13,6 @@ const description = `${profile.firstName} ${profile.lastName}, ${profile.role.to
 export const metadata: Metadata = {
   title,
   description,
-  icons: { icon: '/favicon.svg' },
   openGraph: { title, description, type: 'website', locale: 'fr_FR' },
   twitter: { card: 'summary', title, description },
 };
