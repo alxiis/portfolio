@@ -16,6 +16,7 @@ export const profile = {
   email: 'fvt.alexiis@gmail.com',
   phone: '06 52 14 41 77',
   cvFile: '/CV-Fievet_Alexis.pdf',
+  photo: { src: '/img/alexis.webp', width: 720, height: 960, alt: 'Portrait d’Alexis Fievet' },
   // Le CV indique seulement « Alexis Fievet » sans URL.
   // Colle ici l'URL complète de ton profil : le lien apparaît alors automatiquement (laisse vide pour le masquer).
   linkedin: 'https://www.linkedin.com/in/alexis-fievet/',
@@ -39,7 +40,15 @@ export const qualities = [
   { name: 'Curieux', text: "J'aime apprendre de nouvelles choses et me former en continu." },
 ];
 
+export type Logo = { src: string; width: number; height: number; alt: string };
+
+export const logos: Record<'noous' | 'igensia', Logo> = {
+  noous: { src: '/img/noous.webp', width: 400, height: 154, alt: 'Logo NOOUS' },
+  igensia: { src: '/img/igensia.webp', width: 480, height: 176, alt: 'Logo Groupe Igensia Education' },
+};
+
 export type Experience = {
+  logo?: Logo;
   period: string;
   status?: string;
   company: string;
@@ -53,6 +62,7 @@ export const experiences: Experience[] = [
   {
     period: 'Sept. 2026 — Sept. 2027',
     status: 'En cours',
+    logo: logos.noous,
     company: 'NOOUS',
     role: 'Alternant Technicien IT',
     place: 'Labège',
@@ -67,6 +77,7 @@ export const experiences: Experience[] = [
   {
     period: 'Févr. — Avr. 2026',
     status: '2 mois',
+    logo: logos.noous,
     company: 'NOOUS',
     role: 'Stagiaire Technicien IT',
     place: 'Labège',
@@ -164,6 +175,7 @@ export const education = [
   {
     period: '2024 — En cours',
     note: 'Diplôme prévu en 2027',
+    logo: logos.igensia,
     title: 'Bachelor Infrastructures Réseaux & Cybersécurité',
     school: 'École IPI – Igensia, Blagnac',
     detail: '3ᵉ année en alternance',
