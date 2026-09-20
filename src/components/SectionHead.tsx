@@ -1,7 +1,7 @@
 export default function SectionHead({ num, label, title }: { num: string; label: string; title: string }) {
   return (
     <div className="section-head reveal">
-      <span className="section-num" aria-hidden="true">
+      <span className="section-num" data-parallax aria-hidden="true">
         {num}
       </span>
       <div>

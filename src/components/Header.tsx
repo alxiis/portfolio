@@ -1,9 +1,11 @@
 'use client';
 
+import Link from 'next/link';
 import { useEffect, useState } from 'react';
-import { nav, profile } from '@/data/profile';
+import type { Content, Locale } from '@/data/content';
+import { profile } from '@/data/profile';
 
-export default function Header() {
+export default function Header({ locale, ui }: { locale: Locale; ui: Content['ui'] }) {
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
 
@@ -23,15 +25,15 @@ export default function Header() {
   return (
     <header className={`site-header${scrolled ? ' is-scrolled' : ''}`}>
       <div className="container header-inner">
-        <a href="#top" className="brand" aria-label={`${profile.firstName} ${profile.lastName} — haut de page`}>
+        <a href="#top" className="brand" aria-label={ui.homeAria}>
           <span className="brand-mark">{profile.monogram}</span>
           <span className="brand-name">
             {profile.firstName} {profile.lastName}
           </span>
         </a>
 
-        <nav id="main-nav" className={`nav${open ? ' is-open' : ''}`} aria-label="Navigation principale">
-          {nav.map((item) => (
+        <nav id="main-nav" className={`nav${open ? ' is-open' : ''}`} aria-label={ui.navAria}>
+          {ui.nav.map((item) => (
             <a key={item.href} href={item.href} className="link-u" onClick={() => setOpen(false)}>
               {item.label}
             </a>
@@ -39,8 +41,25 @@ export default function Header() {
         </nav>
 
         <div className="header-actions">
+          <div className="lang" role="group" aria-label={ui.langAria}>
+            {locale === 'fr' ? (
+              <span aria-current="true">FR</span>
+            ) : (
+              <Link href="/" hrefLang="fr" lang="fr" aria-label="Français">
+                FR
+              </Link>
+            )}
+            <span className="lang-sep" aria-hidden="true">/</span>
+            {locale === 'en' ? (
+              <span aria-current="true">EN</span>
+            ) : (
+              <Link href="/en/" hrefLang="en" lang="en" aria-label="English">
+                EN
+              </Link>
+            )}
+          </div>
           <a href={profile.cvFile} target="_blank" rel="noopener" className="cv-link">
-            Mon CV <span aria-hidden="true">↗</span>
+            {ui.cv} <span aria-hidden="true">↗</span>
           </a>
           <button
             type="button"
@@ -49,7 +68,7 @@ export default function Header() {
             aria-controls="main-nav"
             onClick={() => setOpen((v) => !v)}
           >
-            {open ? 'Fermer' : 'Menu'}
+            {open ? ui.close : ui.menu}
           </button>
         </div>
       </div>
