@@ -94,6 +94,21 @@ export default function Home() {
                 ))}
               </div>
               <aside className="about-aside reveal" aria-label="Qualités et informations">
+                <figure className="portrait">
+                  <span className="portrait-frame">
+                    <img
+                      src={profile.photo.src}
+                      width={profile.photo.width}
+                      height={profile.photo.height}
+                      alt={profile.photo.alt}
+                      loading="lazy"
+                      decoding="async"
+                    />
+                  </span>
+                  <figcaption className="mono">
+                    {profile.firstName} {profile.lastName} / {profile.city}
+                  </figcaption>
+                </figure>
                 <h3 className="mono label">Ce que j&apos;apporte</h3>
                 <ul className="qualities">
                   {qualities.map((q) => (
@@ -135,7 +150,14 @@ export default function Home() {
                     {e.status && <p className="tag tag-red">{e.status}</p>}
                   </div>
                   <div className="tl-what">
-                    <h3 className="tl-company">{e.company}</h3>
+                    <div className="tl-head">
+                      <h3 className="tl-company">{e.company}</h3>
+                      {e.logo && (
+                        <span className="logo-tile">
+                          <img src={e.logo.src} width={e.logo.width} height={e.logo.height} alt={e.logo.alt} loading="lazy" decoding="async" />
+                        </span>
+                      )}
+                    </div>
                     <p className="tl-role">
                       {e.role} <span className="mono tl-place">/ {e.place}</span>
                     </p>
@@ -248,7 +270,14 @@ export default function Home() {
                         {e.detail ? ` · ${e.detail}` : ''}
                       </p>
                     </div>
-                    {e.note && <p className="tag">{e.note}</p>}
+                    <div className="edu-side">
+                      {e.logo && (
+                        <span className="logo-tile">
+                          <img src={e.logo.src} width={e.logo.width} height={e.logo.height} alt={e.logo.alt} loading="lazy" decoding="async" />
+                        </span>
+                      )}
+                      {e.note && <p className="tag">{e.note}</p>}
+                    </div>
                   </li>
                 ))}
               </ol>
