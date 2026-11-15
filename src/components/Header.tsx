@@ -8,6 +8,7 @@ import { profile } from '@/data/profile';
 export default function Header({ locale, ui }: { locale: Locale; ui: Content['ui'] }) {
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const [active, setActive] = useState<string | null>(null);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 24);
@@ -22,6 +23,25 @@ export default function Header({ locale, ui }: { locale: Locale; ui: Content['ui
     return () => window.removeEventListener('keydown', onKey);
   }, []);
 
+  // Section en cours de lecture : celle qui traverse une bande située vers le haut de l'écran.
+  useEffect(() => {
+    if (!('IntersectionObserver' in window)) return;
+    const sections = ui.nav
+      .map((item) => document.querySelector<HTMLElement>(item.href))
+      .filter((el): el is HTMLElement => el !== null);
+    const io = new IntersectionObserver(
+      (entries) => {
+        for (const e of entries) {
+          if (e.isIntersecting) setActive(`#${e.target.id}`);
+          else setActive((cur) => (cur === `#${e.target.id}` ? null : cur));
+        }
+      },
+      { rootMargin: '-30% 0px -65% 0px' },
+    );
+    sections.forEach((el) => io.observe(el));
+    return () => io.disconnect();
+  }, [ui.nav]);
+
   return (
     <header className={`site-header${scrolled ? ' is-scrolled' : ''}`}>
       <div className="container header-inner">
@@ -34,7 +54,13 @@ export default function Header({ locale, ui }: { locale: Locale; ui: Content['ui
 
         <nav id="main-nav" className={`nav${open ? ' is-open' : ''}`} aria-label={ui.navAria}>
           {ui.nav.map((item) => (
-            <a key={item.href} href={item.href} className="link-u" onClick={() => setOpen(false)}>
+            <a
+              key={item.href}
+              href={item.href}
+              className="link-u"
+              aria-current={active === item.href ? 'true' : undefined}
+              onClick={() => setOpen(false)}
+            >
               {item.label}
             </a>
           ))}

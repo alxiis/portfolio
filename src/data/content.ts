@@ -19,19 +19,32 @@ export type Content = {
     kicker: string;
     badge: string;
     heroMeta: { seeking: string; seekingVal: string; start: string; startVal: string; base: string };
+    /** Titre de la fenêtre « terminal » du hero. */
+    termTitle: string;
     ctaProjects: string;
     ctaCv: string;
     photoAlt: string;
     about: { label: string; title: string; asideAria: string; bring: string; languages: string; offscreen: string };
     experience: { label: string; title: string; tagsAria: string };
-    projects: { label: string; title: string; goal: string; done: string; stackAria: string };
+    projects: {
+      label: string;
+      title: string;
+      goal: string;
+      done: string;
+      stackAria: string;
+      layers: string;
+      code: string;
+      live: string;
+    };
     skills: { label: string; title: string; education: string };
-    contact: { label: string; lines: [string, string, string]; button: string; cvLink: string };
+    contact: { label: string; lines: [string, string, string]; button: string; cvLink: string; recapAria: string };
     footer: { designed: string; email: string };
   };
   role: string;
   degree: string;
   intro: string;
+  /** Domaines visés, affichés dans le bandeau défilant sous le hero. */
+  domains: string[];
   about: string[];
   qualities: { name: string; text: string }[];
   languages: { name: string; level: string }[];
@@ -39,6 +52,8 @@ export type Content = {
   experiences: {
     period: string;
     status?: string;
+    /** Poste actuel : pastille rouge et nœud plein sur la frise. */
+    current?: boolean;
     logo?: 'noous' | 'igensia';
     company: string;
     role: string;
@@ -54,6 +69,8 @@ export type Content = {
     goal: string;
     done: string;
     stack: string[];
+    /** Briques de l'infrastructure, par rôle (remplace la liste de tags sur le projet principal). */
+    layers?: { role: string; tools: string }[];
     github?: string;
     live?: string;
   }[];
@@ -70,6 +87,10 @@ export type Content = {
 
 const contents: Record<Locale, Content> = { fr, en };
 
+// URL publique du site (ex. https://alxiis.github.io), définie au build par le workflow.
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL;
+const basePath = process.env.NEXT_PUBLIC_BASE_PATH ?? '';
+
 export const getContent = (locale: Locale): Content => contents[locale];
 
 export function buildMetadata(locale: Locale): Metadata {
@@ -78,6 +99,14 @@ export function buildMetadata(locale: Locale): Metadata {
     title,
     description,
     authors: [{ name: `${profile.firstName} ${profile.lastName}` }],
+    // Sans URL publique connue, pas de canonical / hreflang (ils doivent être absolus).
+    ...(siteUrl && {
+      metadataBase: new URL(siteUrl),
+      alternates: {
+        canonical: `${basePath}${locale === 'fr' ? '/' : '/en/'}`,
+        languages: { fr: `${basePath}/`, en: `${basePath}/en/`, 'x-default': `${basePath}/` },
+      },
+    }),
     openGraph: { title, description, type: 'website', locale: ogLocale },
     twitter: { card: 'summary', title, description },
   };

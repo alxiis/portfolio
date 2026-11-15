@@ -20,6 +20,8 @@ type Props = {
 export default function Typewriter({ text, speed = 45, delay = 0, className }: Props) {
   const [count, setCount] = useState(text.length);
   const [caret, setCaret] = useState(false);
+  // Passe à true une fois l'animation prise en main côté client (voir `.tw-ready` dans globals.css).
+  const [ready, setReady] = useState(false);
 
   useEffect(() => {
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
@@ -28,6 +30,7 @@ export default function Typewriter({ text, speed = 45, delay = 0, className }: P
     let interval: ReturnType<typeof setInterval> | undefined;
     let hideCaret: ReturnType<typeof setTimeout> | undefined;
     setCount(0);
+    setReady(true);
 
     const start = setTimeout(() => {
       setCaret(true);
@@ -49,7 +52,7 @@ export default function Typewriter({ text, speed = 45, delay = 0, className }: P
   }, [text, speed, delay]);
 
   return (
-    <span className={`tw${className ? ` ${className}` : ''}`}>
+    <span className={`tw${ready ? ' tw-ready' : ''}${className ? ` ${className}` : ''}`}>
       <span className="sr-only">{text}</span>
       <span className="tw-ghost" aria-hidden="true">
         {text}
